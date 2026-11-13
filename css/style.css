@@ -1,0 +1,381 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Press+Start+2P&display=swap');
+
+:root {
+    --bg-dark: #070913;
+    --card-bg: rgba(18, 24, 38, 0.9);
+    --border-glow: #38bdf8;
+    --accent-gold: #f59e0b;
+    --accent-cyan: #2dd4bf;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    background: radial-gradient(circle at 50% 15%, #1e1b4b 0%, #0c0f1d 60%, #030712 100%);
+    color: var(--text-main);
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 20px 30px;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+ * HEADER SUPERIOR
+ * ============================================================ */
+header {
+    text-align: center;
+    margin-bottom: 16px;
+    width: 100%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ghost-icon {
+    font-size: 1.8rem;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+    animation: ghostHover 2.5s infinite ease-in-out;
+}
+
+@keyframes ghostHover {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.15rem;
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(56, 189, 248, 0.7), 2px 2px 0px #090d16;
+    letter-spacing: 1.5px;
+}
+
+.subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.retro-btn {
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #475569;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.retro-btn:hover {
+    background: #334155;
+    border-color: #38bdf8;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+}
+
+/* ============================================================
+ * LAYOUT PRINCIPAL (CONTROLES A LA IZQUIERDA + JUEGO GRANDE)
+ * ============================================================ */
+.main-layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    width: 100%;
+    max-width: 1240px;
+    position: relative;
+}
+
+/* ============================================================
+ * MENÚ DESPLEGABLE DE CONTROLES A LA IZQUIERDA
+ * ============================================================ */
+.controls-sidebar {
+    width: 250px;
+    flex-shrink: 0;
+    background: var(--card-bg);
+    border: 1px solid rgba(71, 85, 105, 0.6);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Botón de toggle del menú desplegable */
+.drawer-toggle-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border: none;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.6);
+    color: #38bdf8;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.drawer-toggle-btn:hover {
+    background: #334155;
+}
+
+.drawer-arrow {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.controls-sidebar.collapsed .drawer-arrow {
+    transform: rotate(-90deg);
+}
+
+.controls-sidebar.collapsed .drawer-content {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    pointer-events: none;
+}
+
+/* Contenido del menú desplegable */
+.drawer-content {
+    padding: 16px;
+    max-height: 800px;
+    opacity: 1;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.control-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.control-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.keys-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.key-badge {
+    background: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 5px;
+    padding: 3px 8px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #f8fafc;
+    font-weight: 700;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.action-desc {
+    font-size: 0.78rem;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.companion-tip {
+    background: rgba(13, 148, 136, 0.15);
+    border: 1px solid rgba(45, 212, 191, 0.4);
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.73rem;
+    color: #ccfbf1;
+    line-height: 1.4;
+}
+
+/* ============================================================
+ * PANTALLA DE JUEGO AGRANDADA (CANVAS NÍTIDO)
+ * ============================================================ */
+.game-stage-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.canvas-frame {
+    position: relative;
+    background: #000000;
+    border-radius: 14px;
+    padding: 8px;
+    box-shadow: 
+        0 15px 45px rgba(0, 0, 0, 0.85),
+        0 0 25px rgba(56, 189, 248, 0.25);
+    border: 2px solid #334155;
+    transition: box-shadow 0.3s ease;
+}
+
+.canvas-frame:hover {
+    box-shadow: 
+        0 20px 55px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(56, 189, 248, 0.4);
+}
+
+/* Canvas del Juego: Resolución nativa 320x240 escalada nítidamente a gran tamaño */
+#gameCanvas {
+    display: block;
+    width: 800px;
+    height: 600px;
+    max-width: calc(100vw - 320px);
+    aspect-ratio: 4 / 3;
+    background-color: #080c18;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    border-radius: 8px;
+}
+
+/* Controles en Pantalla para Touch / Opcional */
+.mobile-controls-bar {
+    display: none;
+    margin-top: 14px;
+    width: 100%;
+    max-width: 800px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.dpad-container {
+    width: 110px;
+    height: 110px;
+    position: relative;
+}
+
+.dpad-btn {
+    position: absolute;
+    background: #1e2430;
+    border: 2px solid #0f172a;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 3px 5px rgba(0,0,0,0.5);
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.dpad-btn:active {
+    background: #0f172a;
+    transform: scale(0.95);
+}
+
+.dpad-up { top: 0; left: 37px; width: 36px; height: 38px; }
+.dpad-down { bottom: 0; left: 37px; width: 36px; height: 38px; }
+.dpad-left { top: 37px; left: 0; width: 38px; height: 36px; }
+.dpad-right { top: 37px; right: 0; width: 38px; height: 36px; }
+.dpad-center { position: absolute; top: 37px; left: 37px; width: 36px; height: 36px; background: #1e2430; pointer-events: none; }
+
+.action-buttons {
+    display: flex;
+    gap: 16px;
+    transform: rotate(-15deg);
+}
+
+.action-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #0284c7 0%, #0369a1 100%);
+    border: 2px solid #0c4a6e;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+.action-btn:active {
+    transform: translateY(2px) scale(0.96);
+}
+
+/* ============================================================
+ * RESPONSIVE PARA PANTALLAS MENORES
+ * ============================================================ */
+@media (max-width: 1080px) {
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .controls-sidebar {
+        width: 100%;
+        max-width: 800px;
+    }
+
+    #gameCanvas {
+        width: 100%;
+        max-width: 760px;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-controls-bar {
+        display: flex;
+    }
+
+    #gameCanvas {
+        max-width: 95vw;
+    }
+
+    header {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Academia Espectral - Juego GBA en JavaScript</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>👻</text></svg>">
+</head>
+<body>
+
+    <!-- Encabezado Superior -->
+    <header>
+        <div class="header-brand">
+            <span class="ghost-icon">👻</span>
+            <div>
+                <h1>ACADEMIA ESPECTRAL</h1>
+                <div class="subtitle">Ghost Academy Chronicles • Estilo Pokémon GBA</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button id="toggleAudioBtn" class="retro-btn" title="Alternar Sonido">
+                <span>🔊</span> <span id="audioBtnLabel">Audio: ON</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Layout Principal: Controles Desplegables a la Izquierda + Pantalla Agrandada -->
+    <main class="main-layout">
+        
+        <!-- Menú Desplegable de Controles a la Izquierda -->
+        <aside class="controls-sidebar" id="controlsSidebar">
+            <button class="drawer-toggle-btn" id="drawerToggleBtn" aria-expanded="true">
+                <span>⌨️ Controles de Teclado</span>
+                <span class="drawer-arrow" id="drawerArrow">▼</span>
+            </button>
+
+            <div class="drawer-content" id="drawerContent">
+                <div class="control-item">
+                    <span class="control-label">Movimiento (4 Direcciones)</span>
+                    <div class="keys-row">
+                        <span class="key-badge">▲ ▼ ◀ ▶</span>
+                        <span class="action-desc">o</span>
+                        <span class="key-badge">W A S D</span>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <span class="control-label">Botón (A) - Hablar / Interactuar</span>
+                    <div class="keys-row">
+                        <span class="key-badge">Z</span>
+                        <span class="key-badge">Espacio</span>
+                        <span class="key-badge">Enter</span>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <span class="control-label">Botón (B) - Correr con Zapatillas</span>
+                    <div class="keys-row">
+                        <span class="key-badge">X</span>
+                        <span class="key-badge">Shift</span>
+                    </div>
+                </div>
+
+                <div class="control-item">
+                    <span class="control-label">START - Menú Pokémon</span>
+                    <div class="keys-row">
+                        <span class="key-badge">Escape</span>
+                        <span class="key-badge">M</span>
+                    </div>
+                </div>
+
+                <div class="companion-tip">
+                    <strong>🤝 Acompañante Leonel:</strong><br>
+                    Tras rescatarlo en el sótano, búscalo en el vestíbulo para que te acompañe a explorar el colegio, los nuevos pisos y la terraza en L.
+                </div>
+            </div>
+        </aside>
+
+        <!-- Contenedor de la Pantalla de Juego Agrandada -->
+        <section class="game-stage-wrapper">
+            <div class="canvas-frame">
+                <canvas id="gameCanvas" width="320" height="240"></canvas>
+            </div>
+
+            <!-- Controles Móviles / Táctiles (para dispositivos táctiles) -->
+            <div class="mobile-controls-bar">
+                <div class="dpad-container">
+                    <div class="dpad-btn dpad-up" id="btn-up">▲</div>
+                    <div class="dpad-btn dpad-left" id="btn-left">◀</div>
+                    <div class="dpad-center"></div>
+                    <div class="dpad-btn dpad-right" id="btn-right">▶</div>
+                    <div class="dpad-btn dpad-down" id="btn-down">▼</div>
+                </div>
+
+                <button class="retro-btn" id="btn-start" style="padding: 10px 18px;">
+                    START
+                </button>
+
+                <div class="action-buttons">
+                    <button class="action-btn" id="btn-b">B</button>
+                    <button class="action-btn" id="btn-a">A</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts del Juego en orden de dependencias -->
+    <script src="js/audio.js"></script>
+    <script src="js/sprites.js"></script>
+    <script src="js/dialog.js"></script>
+    <script src="js/puzzle.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/game.js"></script>
+
+    <!-- Script de control del Menú Desplegable y Audio -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('controlsSidebar');
+            const toggleBtn = document.getElementById('drawerToggleBtn');
+            const toggleAudioBtn = document.getElementById('toggleAudioBtn');
+            const audioBtnLabel = document.getElementById('audioBtnLabel');
+
+            // Alternar menú desplegable de controles a la izquierda
+            if (toggleBtn && sidebar) {
+                toggleBtn.addEventListener('click', () => {
+                    const isCollapsed = sidebar.classList.toggle('collapsed');
+                    toggleBtn.setAttribute('aria-expanded', !isCollapsed);
+                });
+            }
+
+            // Alternar audio
+            if (toggleAudioBtn && window.retroAudio) {
+                toggleAudioBtn.addEventListener('click', () => {
+                    if (!window.retroAudio.ctx) {
+                        window.retroAudio.init();
+                    }
+                    const isMuted = window.retroAudio.toggleMute();
+                    audioBtnLabel.textContent = isMuted ? 'Audio: OFF' : 'Audio: ON';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
